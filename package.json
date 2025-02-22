@@ -41,7 +41,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "deploy-storybook": "yarn build-storybook && firebase deploy --only hosting"
   },
   "jest": {
     "testEnvironment": "jsdom",

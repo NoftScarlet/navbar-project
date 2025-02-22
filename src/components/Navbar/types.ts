@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 export type Theme = 'light' | 'dark';
 export type FontFamily = 'Arial' | 'Helvetica' | 'Times New Roman' | 'Georgia' | 'Verdana';
 
-export interface ThemeConfig {
+export type ThemeConfig = {
   theme: Theme;
   font: FontFamily;
   textColor: string;
@@ -11,14 +11,14 @@ export interface ThemeConfig {
   toggleTheme?: () => void;
 }
 
-export interface NavItem {
+export type NavItem = {
   id: string;
   label: string;
   icon?: ReactNode;
   href?: string;
   displayMode?: 'text' | 'icon' | 'mixed';
   subItems?: NavItem[];
-  textColorOverride?: string;
+  contentColorOverride?: string;
   backgroundColorOverride?: string;
   fontOverride?: FontFamily;
 }
@@ -28,9 +28,9 @@ export interface NavItemProps {
   level?: number;
   isMobile: boolean;
   onExpand: (id: string, level: number) => void;
-  expandedItems: Set<string>;
+  expandedItems: Map<number, string>;
   onNavClose: () => void;
-  textColorOverride?: string;
+  contentColorOverride?: string;
   backgroundColorOverride?: string;
   fontOverride?: FontFamily;
 }

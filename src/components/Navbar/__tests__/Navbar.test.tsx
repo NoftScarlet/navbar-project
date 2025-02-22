@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 import { Navbar } from '../Navbar';
 import { ThemeContext } from '../ThemeContext';
-import { ThemeConfig } from '../navbar.types';
+import { ThemeConfig } from '../types';
 
 const defaultThemeContext: ThemeConfig = {
   theme: 'light',

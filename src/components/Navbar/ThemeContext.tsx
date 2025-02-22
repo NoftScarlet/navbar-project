@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { ThemeConfig } from './navbar.types';
+import { ThemeConfig } from './types';
 
 const defaultConfig: ThemeConfig = {
   theme: 'light',

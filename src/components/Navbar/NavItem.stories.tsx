@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StoryFn, Meta } from '@storybook/react';
 import { FiHome } from 'react-icons/fi';
 import { NavItem } from './NavItem';
-import { NavItemProps, Theme, FontFamily } from './navbar.types';
+import { NavItemProps, Theme, FontFamily } from './types';
 import { ThemeContext } from './ThemeContext';
 
 const StoryThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -59,8 +59,8 @@ A navigation item component that supports:
         category: 'Content'
       }
     },
-    textColorOverride: {
-      description: 'Override default text color',
+    contentColorOverride: {
+      description: 'Override default content color',
       control: 'color',
       table: {
         category: 'Styling'
@@ -112,17 +112,20 @@ A navigation item component that supports:
 } as Meta;
 
 const Template: StoryFn<NavItemProps> = (args) => {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Map<number, string>>(new Map());
 
   const handleExpand = (id: string, level: number) => {
     setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
+      const newMap = new Map(prev);
+      if (prev.get(level) === id) {
+        const levelsToRemove = Array.from(prev.keys())
+          .filter(key => key >= level);
+        levelsToRemove.forEach(key => newMap.delete(key));
       } else {
-        newSet.add(id);
+        newMap.set(level, id);
       }
-      return newSet;
+
+      return newMap;
     });
   };
 
@@ -144,7 +147,7 @@ StandardItem.args = {
     id: 'home',
     label: 'Home',
     icon: <FiHome />,
-    href: '/',
+    href: '#',
     displayMode: 'mixed'
   },
   isMobile: false
@@ -156,7 +159,7 @@ IconOnly.args = {
     id: 'home',
     label: 'Home',
     icon: <FiHome />,
-    href: '/',
+    href: '#',
     displayMode: 'icon'
   },
   isMobile: false
@@ -168,7 +171,7 @@ TextOnly.args = {
     id: 'home',
     label: 'Home',
     icon: <FiHome />,
-    href: '/',
+    href: '#',
     displayMode: 'text'
   },
   isMobile: false

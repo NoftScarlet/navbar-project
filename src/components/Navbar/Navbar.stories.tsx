@@ -17,8 +17,19 @@ import {
   FiMoon
 } from 'react-icons/fi';
 import { Navbar } from './Navbar';
-import { NavbarProps, Theme, FontFamily } from './navbar.types';
+import { NavbarProps, Theme, FontFamily } from './types';
 import { ThemeContext } from './ThemeContext';
+
+const colors = {
+  light: {
+    background: '#ffffff',
+    text: '#333333',
+  },
+  dark: {
+    background: '#1a1a1a',
+    text: '#ffffff',
+  },
+};
 
 const ThemeSwitcher: React.FC<{ theme: Theme; onToggle: () => void }> = ({ theme, onToggle }) => (
   <button
@@ -27,19 +38,13 @@ const ThemeSwitcher: React.FC<{ theme: Theme; onToggle: () => void }> = ({ theme
       bottom: '1rem',
       right: '1rem',
       padding: '0.5rem',
-      background: theme === 'light' ? '#ffffff' : '#1a1a1a',
-      border: '1px solid currentColor',
-      borderRadius: '4px',
-      color: theme === 'light' ? '#333333' : '#ffffff',
+      background: theme === 'light' ? colors.light.background : colors.dark.background,
+      color: theme === 'light' ? colors.light.text : colors.dark.text,
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
-      gap: '0.5rem',
-      zIndex: 1001,
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
     }}
     onClick={onToggle}
-    aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
   >
     {theme === 'light' ? (
       <>
@@ -61,8 +66,8 @@ const StoryThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     <ThemeContext.Provider value={{
       theme,
       font,
-      textColor: theme === 'light' ? '#333333' : '#ffffff',
-      backgroundColor: theme === 'light' ? '#ffffff' : '#1a1a1a',
+      textColor: theme === 'light' ? colors.light.text : colors.dark.text,
+      backgroundColor: theme === 'light' ? colors.light.background : colors.dark.background,
       toggleTheme: () => setTheme(prev => prev === 'light' ? 'dark' : 'light')
     }}>
       <div style={{ paddingTop: '64px' }}>
@@ -90,13 +95,12 @@ export default {
       description: {
         component: `
 A responsive navigation bar that features:
-- Horizontal menu with wrapping for desktop view
+- Horizontal menu for desktop view
 - Hover and keyboard-triggered dropdowns on desktop
 - Accordion-style expansion on mobile
 - Multiple levels of nested navigation
 - Mixed display modes (icon, text, or both)
-- Theme switching support (light/dark)
-- Font family configuration
+- Theme switching support through theme context provider
         `
       }
     }
@@ -269,22 +273,55 @@ NavbarWithNestedItems.args = {
     }
   ]
 };
-
 NavbarWithNestedItems.parameters = {
   docs: {
-    description: {
-      story: `
-This example demonstrates:
-- Primary level items shown horizontally (desktop view)
-- Automatic wrapping of primary items when space is limited
-- Hover-triggered dropdown menus (desktop view)
-- Right-side expansion for nested submenus (desktop view)
-- Accordion-style expansion (mobile view)
-- Mixed display modes (icon-only, text-only, and combined)
-- Multiple levels of navigation (up to 4 levels deep)
-- Theme switching functionality
-- Responsive design (resize window to see different layouts)
-      `
+    source: {
+      code: `
+import { Navbar, ThemeContext } from '@your-org/navbar';
+import { FiGrid, FiHome, /* ... other icons */ } from 'react-icons/fi';
+
+function App() {
+return (
+  <ThemeContext.Provider 
+    value={{
+      theme: 'light',
+      font: 'Arial',
+      textColor: '#333333',
+      backgroundColor: '#ffffff',
+      hoverBackgroundColor: 'rgba(0, 0, 0, 0.05)'
+    }}
+  >
+    <Navbar 
+      brand={{
+        logo: <FiGrid />,
+        name: 'TechMart',
+        href: '/'
+      }}
+      items={[
+        {
+          id: 'home',
+          label: 'Home',
+          icon: <FiHome />,
+          href: '/',
+          displayMode: 'mixed'
+        },
+        {
+          id: 'products',
+          label: 'Products',
+          icon: <FiShoppingBag />,
+          displayMode: 'mixed',
+          subItems: [
+            // ... other items
+          ]
+        },
+        // ... other items
+      ]}
+    />
+  </ThemeContext.Provider>
+);
+}`,
+      language: 'tsx',
+      type: 'auto',
     }
   }
-};
+}

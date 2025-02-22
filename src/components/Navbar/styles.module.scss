@@ -4,14 +4,14 @@
   --nav-border-light: #eaeaea;
   --nav-hover-light: rgba(0, 0, 0, 0.05);
   --nav-active-light: rgba(0, 0, 0, 0.1);
-  --nav-focus-light: #0066cc;
 
   --nav-bg-dark: #1a1a1a;
   --nav-text-dark: #ffffff;
   --nav-border-dark: #333333;
   --nav-hover-dark: rgba(255, 255, 255, 0.1);
   --nav-active-dark: rgba(255, 255, 255, 0.15);
-  --nav-focus-dark: #66b3ff;
+
+  --nav-hover: rgba(0, 0, 0, 0.05);
 }
 
 .navbar {
@@ -30,7 +30,6 @@
     --nav-border: var(--nav-border-light);
     --nav-hover: var(--nav-hover-light);
     --nav-active: var(--nav-active-light);
-    --nav-focus: var(--nav-focus-light);
   }
 
   &[data-theme="dark"] {
@@ -39,7 +38,6 @@
     --nav-border: var(--nav-border-dark);
     --nav-hover: var(--nav-hover-dark);
     --nav-active: var(--nav-active-dark);
-    --nav-focus: var(--nav-focus-dark);
   }
 
   background-color: var(--nav-bg);
@@ -96,11 +94,6 @@
     background-color: var(--nav-hover);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--nav-focus);
-    outline-offset: -2px;
-  }
-
   &.hasSubmenu {
     padding-right: 2rem;
 
@@ -122,6 +115,10 @@
   align-items: center;
   gap: 0.5rem;
   width: 100%;
+
+  &:hover {
+    background-color: var(--nav-hover-bg);
+  }
 }
 
 .submenu {

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 import { NavItem } from '../NavItem';
 import { ThemeContext } from '../ThemeContext';
-import { ThemeConfig } from '../navbar.types';
+import { ThemeConfig } from '../types';
 
 const defaultThemeContext: ThemeConfig = {
   theme: 'light',
@@ -34,7 +34,7 @@ describe('NavItem', () => {
     },
     isMobile: false,
     onExpand: mockOnExpand,
-    expandedItems: new Set<string>(),
+    expandedItems: new Map<number, string>(),
     onNavClose: mockOnNavClose,
   };
 
@@ -80,11 +80,11 @@ describe('NavItem', () => {
       ...defaultProps,
       item: {
         ...defaultProps.item,
-        textColorOverride: '#ff0000',
+        contentColorOverride: '#ff0000',
         backgroundColorOverride: '#f0f0f0',
         fontOverride: 'Georgia' as const,
       },
-      textColorOverride: '#ff0000',
+      contentColorOverride: '#ff0000',
       backgroundColorOverride: '#f0f0f0',
       fontOverride: 'Georgia' as const,
     };
@@ -92,7 +92,7 @@ describe('NavItem', () => {
     renderWithTheme(
       <NavItem
         {...props}
-        {...(props.item.textColorOverride ? { textColorOverride: props.item.textColorOverride } : {})}
+        {...(props.item.contentColorOverride ? { contentColorOverride: props.item.contentColorOverride } : {})}
         {...(props.item.backgroundColorOverride ? { backgroundColorOverride: props.item.backgroundColorOverride } : {})}
         {...(props.item.fontOverride ? { fontOverride: props.item.fontOverride } : {})}
       />

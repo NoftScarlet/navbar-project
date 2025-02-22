@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
-import { NavbarProps } from './navbar.types';
+import { NavbarProps } from './types';
 import { NavItem } from './NavItem';
 import { useTheme } from './ThemeContext';
 import styles from './styles.module.scss';
@@ -11,7 +11,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Map<number, string>>(new Map());
   const navRef = useRef<HTMLDivElement>(null);
   const { theme, font } = useTheme();
 
@@ -19,7 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const isMobileView = window.innerWidth <= 768;
     setIsMobile(window.innerWidth <= 768);
     if (isMobileView !== isMobile) {
-      setExpandedItems(new Set());
+      setExpandedItems(new Map());
       setIsOpen(false);
     }
   }, [isMobile]);
@@ -33,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!isMobile && navRef.current && !navRef.current.contains(event.target as Node)) {
-        setExpandedItems(new Set());
+        setExpandedItems(new Map());
       }
     };
 
@@ -43,31 +43,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const handleExpandItem = (itemId: string, level: number) => {
     setExpandedItems(prev => {
-      const newSet = new Set(prev);
+      const newMap = new Map(prev);
 
-      if (newSet.has(itemId)) {
-        const itemsToRemove = Array.from(newSet).filter(id =>
-          id === itemId || id.startsWith(`${itemId}-`)
-        );
-        itemsToRemove.forEach(id => newSet.delete(id));
+      if (prev.get(level) === itemId) {
+        const levelsToRemove = Array.from(prev.keys())
+          .filter(key => key >= level);
+        levelsToRemove.forEach(key => newMap.delete(key));
       } else {
-        if (!isMobile && level === 0) {
-          Array.from(newSet).forEach(id => {
-            if (!id.includes('-')) {
-              newSet.delete(id);
-            }
-          });
-        }
-        newSet.add(itemId);
+        newMap.set(level, itemId);
       }
 
-      return newSet;
+      return newMap;
     });
   };
 
   const handleNavClose = () => {
     setIsOpen(false);
-    setExpandedItems(new Set());
+    setExpandedItems(new Map());
   };
 
   return (
@@ -108,10 +100,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             key={item.id}
             item={item}
             isMobile={isMobile}
-            onExpand={handleExpandItem}
             expandedItems={expandedItems}
+            onExpand={handleExpandItem}
             onNavClose={handleNavClose}
-            {...(item.textColorOverride ? { textColorOverride: item.textColorOverride } : {})}
+            {...(item.contentColorOverride ? { contentColorOverride: item.contentColorOverride } : {})}
             {...(item.backgroundColorOverride ? { backgroundColorOverride: item.backgroundColorOverride } : {})}
             {...(item.fontOverride ? { fontOverride: item.fontOverride } : {})}
           />

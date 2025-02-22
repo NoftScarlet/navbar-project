@@ -10,7 +10,7 @@ A flexible, accessible navigation component built with React and TypeScript. Fea
 
 See Notion Docs page [here](https://prairie-mallet-ece.notion.site/Design-System-Guide-for-Navbar-1a21b291950d808582f0dcc962cd4930)
 
-## Discussions
+## Scalability, Maintainability & Performance Discussions
 
 See Notion Docs page [here](https://prairie-mallet-ece.notion.site/Discussions-1a21b291950d80749660e1c47629b701)
 

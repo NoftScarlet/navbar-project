@@ -49,7 +49,24 @@ A navigation item component that supports:
 - Theme adaptation
 - Custom styling overrides
         `
-      }
+      },
+      source: {
+        code: `<NavItem
+  contentColorOverride=""
+  fontOverride=""
+  backgroundColorOverride=""
+  expandedItems={expandedItems}
+  item={{
+    displayMode: 'mixed',
+    href: '#',
+    icon: <FiHome />,
+    id: 'home',
+    label: 'Home'
+  }}
+  onExpand={() => {}}
+  onNavClose={() => {}}
+/>`}
+
     }
   },
   argTypes: {
@@ -60,26 +77,28 @@ A navigation item component that supports:
       }
     },
     contentColorOverride: {
-      description: 'Override default content color',
+      description: 'Override theme content color',
       control: 'color',
       table: {
+        defaultValue: { summary: 'undefined' },
         category: 'Styling'
       }
     },
     backgroundColorOverride: {
-      description: 'Override default background color',
+      description: 'Override theme background color',
       control: 'color',
       table: {
+        defaultValue: { summary: 'undefined' },
         category: 'Styling'
       }
     },
     fontOverride: {
-      description: 'Override default font family',
+      description: 'Override theme font family',
       control: {
-        type: 'select',
         options: ['Arial', 'Helvetica', 'Times New Roman', 'Georgia', 'Verdana']
       },
       table: {
+        defaultValue: { summary: 'undefined' },
         category: 'Styling'
       }
     },
@@ -108,6 +127,10 @@ A navigation item component that supports:
         disable: true
       }
     }
+  },
+  args: {
+    backgroundColorOverride: '#04a9b9',
+    contentColorOverride: '#FFFFFF',
   }
 } as Meta;
 

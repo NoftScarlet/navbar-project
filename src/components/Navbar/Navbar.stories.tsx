@@ -35,8 +35,8 @@ const ThemeSwitcher: React.FC<{ theme: Theme; onToggle: () => void }> = ({ theme
   <button
     style={{
       position: 'fixed',
-      bottom: '1rem',
-      right: '1rem',
+      bottom: '2rem',
+      right: '2rem',
       padding: '0.5rem',
       background: theme === 'light' ? colors.light.background : colors.dark.background,
       color: theme === 'light' ? colors.light.text : colors.dark.text,
@@ -94,13 +94,13 @@ export default {
     docs: {
       description: {
         component: `
-A responsive navigation bar that features:
+A responsive navigation bar that's consisted of \`NavItem[]\`. It features:
+- Theme switching support through theme context provider
 - Horizontal menu for desktop view
 - Hover and keyboard-triggered dropdowns on desktop
 - Accordion-style expansion on mobile
 - Multiple levels of nested navigation
 - Mixed display modes (icon, text, or both)
-- Theme switching support through theme context provider
         `
       }
     }
@@ -280,16 +280,18 @@ NavbarWithNestedItems.parameters = {
 import { Navbar, ThemeContext } from '@your-org/navbar';
 import { FiGrid, FiHome, /* ... other icons */ } from 'react-icons/fi';
 
+const mockThemeState = {
+  theme: 'light',
+  font: 'Arial',
+  textColor: '#333333',
+  backgroundColor: '#ffffff',
+  hoverBackgroundColor: 'rgba(0, 0, 0, 0.05)'
+}
+
 function App() {
 return (
   <ThemeContext.Provider 
-    value={{
-      theme: 'light',
-      font: 'Arial',
-      textColor: '#333333',
-      backgroundColor: '#ffffff',
-      hoverBackgroundColor: 'rgba(0, 0, 0, 0.05)'
-    }}
+    value={mockThemeState}
   >
     <Navbar 
       brand={{

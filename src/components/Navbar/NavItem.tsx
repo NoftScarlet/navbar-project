@@ -1,8 +1,10 @@
 import React from 'react';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { NavItemProps } from './types';
 import { useTheme } from './ThemeContext';
 import styles from './styles.module.scss';
+import {
+  handleKeyDown, handleClick, handleMouseEnter, handleMouseLeave, renderChevron, renderContent
+} from './util';
 
 export const NavItem: React.FC<NavItemProps> = ({
   item,
@@ -16,7 +18,7 @@ export const NavItem: React.FC<NavItemProps> = ({
   fontOverride
 }) => {
   const { textColor, backgroundColor, font } = useTheme();
-  const hasSubItems = item.subItems && item.subItems.length > 0;
+  const hasSubItems = !!(item.subItems && item.subItems.length > 0);
   const isPrimaryLevel = level === 0;
   const isExpanded = expandedItems.get(level) === item.id;
 
@@ -26,94 +28,21 @@ export const NavItem: React.FC<NavItemProps> = ({
     '--item-font': fontOverride || font,
   } as React.CSSProperties;
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (hasSubItems) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onExpand(item.id, level);
-      }
-    }
-  };
-
-  const handleClick = (e: React.MouseEvent) => {
-    if (hasSubItems) {
-      if (!isMobile) {
-        return;
-      }
-      e.preventDefault();
-      onExpand(item.id, level);
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (!isMobile && hasSubItems && !isExpanded) {
-      onExpand(item.id, level);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!isMobile && hasSubItems && isExpanded) {
-      onExpand(item.id, level);
-    }
-  };
-
-  const renderChevron = () => {
-    if (!hasSubItems) return null;
-
-    if (isMobile) {
-      return (
-        <span className={`${styles.submenuIcon} ${isExpanded ? styles.expanded : ''}`}>
-          <FiChevronDown />
-        </span>
-      );
-    } else {
-      return (
-        <span className={styles.submenuIcon}>
-          {isPrimaryLevel ? <FiChevronDown /> : <FiChevronRight />}
-        </span>
-      );
-    }
-  };
-
-  const content = () => {
-    switch (item.displayMode) {
-      case 'icon':
-        return (
-          <>
-            {item.icon}
-            {hasSubItems && renderChevron()}
-          </>
-        );
-      case 'text':
-        return (
-          <>
-            {item.label}
-            {hasSubItems && renderChevron()}
-          </>
-        );
-      default:
-        return (
-          <>
-            {item.icon && <span className={styles.icon}>{item.icon}</span>}
-            <span className={styles.label}>{item.label}</span>
-            {hasSubItems && renderChevron()}
-          </>
-        );
-    }
-  };
+  const chevron = renderChevron(hasSubItems, isMobile, isExpanded, isPrimaryLevel);
+  const content = () => renderContent(item, hasSubItems, () => chevron);
 
   return (
     <div
       className={`${styles.navItemWrapper} ${level > 0 ? styles.nested : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter(isMobile, hasSubItems, isExpanded, onExpand, item.id, level)}
+      onMouseLeave={handleMouseLeave(isMobile, hasSubItems, isExpanded, onExpand, item.id, level)}
       style={itemStyle}
     >
       {hasSubItems ? (
         <div
           className={`${styles.navItem} ${styles.hasSubmenu}`}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
+          onClick={handleClick(hasSubItems, isMobile, onExpand, item.id, level)}
+          onKeyDown={handleKeyDown(hasSubItems, onExpand, item.id, level)}
           tabIndex={0}
           role="button"
           aria-expanded={isExpanded}
